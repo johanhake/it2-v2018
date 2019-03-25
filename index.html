@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Museum</title>
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <link rel="stylesheet" href="css/bildekarusell.css">
+    <style>
+        body{
+            font-family: Verdana, sans-serif;
+        }
+
+        nav{
+            width: 1024px;
+            margin: 0 auto;
+            display: flex;
+            background-color: #F7F0EA;
+        }
+
+        nav img{
+            flex-grow: 0;
+            transition: 0.5s;
+            z-index: 2;
+            border-radius: 5px;
+        }
+
+        nav img:hover{
+            transform: scale(1.2);
+        }
+
+        nav img:hover ~ div div{
+            opacity: 1;
+        }
+
+        nav div {
+            position: relative;
+            width: 0;
+        }
+
+        nav div div {
+            position: absolute;
+            width: 255px;
+            transform: translate(-250px, 95px);
+            background-color: #F7F0EA;
+            color: #615C56;
+            z-index: 1;
+            border-radius: 5px;
+            opacity: 0;
+            transition: 0.5s;
+            padding: 5px;
+        }
+
+        nav a{
+            flex-grow: 1;
+            text-align: center;
+            font-size: 2em;
+            text-decoration: none;
+            background-color: #F7F0EA;
+            color: #615C56;
+            padding-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<nav>
+    <img src="bilder/aapningstider.jpg" onmouseover="visInfo('aapningstider')" alt="">
+    <img src="bilder/priser.jpg" onmouseover="visInfo('priser')" alt="">
+    <img src="bilder/informasjon.jpg" onmouseover="visInfo('informasjon')" alt="">
+    <div id="infokontainer">
+        <div id="info"></div>
+    </div>
+    <a href="program.html">Program</a>
+    <a href="quiz.html">Quiz</a>
+</nav>
+<main>
+    <div id="innpakning">
+        <div id="bildeInnpakning">
+            <img src="bilder/intro1.jpg">
+            <img src="bilder/intro2.jpg">
+            <img src="bilder/intro3.jpg">
+            <img src="bilder/intro4.jpg">
+        </div>
+        <div id="bildenav">
+            <i onclick="flyttHoyre()" class="fas fa-angle-left"></i>
+            <i onclick="flyttTilBilde(event)" class="far fa-circle" data-indeks="0"></i>
+            <i onclick="flyttTilBilde(event)" class="fas fa-circle" data-indeks="1"></i>
+            <i onclick="flyttTilBilde(event)" class="fas fa-circle" data-indeks="2"></i>
+            <i onclick="flyttTilBilde(event)" class="fas fa-circle" data-indeks="3"></i>
+            <i onclick="flyttVenstre()"class="fas fa-angle-right"></i>
+        </div>
+    </div>
+</main>
+<script src="js/bildekarusell.js"></script>
+<script>
+
+    // Objekt med info om icon visning
+    let info = {
+        aapningstider: `<h3>Åpningstider:</h3>
+                        <p>Tirsdag – søndag 11.00-16.00</p>`,
+        priser: `<h3>Billetter:</h3>
+                    <p>
+                    Voksen: 120 kr<br>
+                    Student/honnør: 100 kr<br>
+                    Barn (0-15 år): Gratis
+                    </p>`,
+        informasjon: `<h3>Informasjon:</h3>
+                        <p>
+                        Besøksadresse: Lade allé 60, 7041 Trondheim 73 87 02 80 post@ringve.no<br>
+                        Postadresse: Postboks 6289 Torgarden, 7489 Trondheim
+                        </p>
+`
+    };
+
+    // Viser ulik info på info diven
+    function visInfo(infoType){
+        document.querySelector("nav div div").innerHTML = info[infoType];
+    }
+
+</script>
+</body>
+</html>
