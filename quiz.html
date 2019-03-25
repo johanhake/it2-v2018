@@ -3,8 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <title>Quiz</title>
+    <style>
+        body{
+            font-family: Verdana, sans-serif;
+        }
+        img{
+            transition: 0.125s;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        img:hover{
+            transform: scale(1.2);
+        }
+
+        #bilder{
+            display: flex;
+        }
+    </style>
 </head>
 <body>
+<h1>Gjett instrumentlyden!!</h1>
+<h3>Highscore: <span>-</span> gjetninger</h3>
+<div id="bilder">
 
+</div>
+<button id="knapp">Start quiz</button>
+<audio src=""></audio>
+<h2 id="beskjed"></h2>
+
+<script>
+
+    // DOM
+    let knapp = document.querySelector("button");
+    let audio = document.querySelector("audio");
+    let highScoreTekst = document.querySelector("span");
+    let bildeDiver;
+
+    // Alle instrument
+    let instrument = ["obo", "klarinett", "fløyte", "fagott", "valthorn"];
+
+    // Variabler
+    let skalSpilles = [];
+    let valgtInstrument;
+    let antallGjetninger = 0;
+    let highScore = 100;
+
+    // Lager bilder og tekster
+    function setup(){
+
+        let bilderDiv = document.querySelector("#bilder");
+        for (let i = 0; i < instrument.length; i++) {
+            bilderDiv.innerHTML += `<div>
+                <img src="bilder/${instrument[i]}.jpg" onclick="gjett(${i})" alt="">
+                <h3>${instrument[i]}</h3>
+                </div>`;
+        }
+
+        // Henter ut bildedivene fra DOMen
+        bildeDiver = document.querySelectorAll("#bilder div");
+
+        // Registrerer start lytterfunksjon
+        knapp.onclick = startQuiz;
+    }
+
+    // Starter quizen
+    function startQuiz(event){
+        beskjed.innerHTML = "";
+        knapp.innerHTML = "Spill instrument på nytt"
+        knapp.onclick = spillInstrument;
+        antallGjetninger = 0;
+        
+        skalSpilles = [];
+        for (let i = 0; i < instrument.length; i++) {
+            skalSpilles.push(i);
+            bildeDiver[i].style.display = "block";
+        }
+
+        // Finner første instrumentet
+        finnNyttInstrument();
+    }
+
+    // Finner nytt instrument
+    function finnNyttInstrument(){
+
+        if (skalSpilles.length===0){
+            avslutt();
+            return;
+        }
+
+        // Finner en tilfeldig indeks
+        let indeks = Math.floor(Math.random()*skalSpilles.length);
+
+        // Finner indeksen til det valgte instrummentet
+        valgtInstrument = skalSpilles[indeks];
+
+        // Tar bort det valgte instrumentet
+        skalSpilles.splice(indeks, 1);
+
+        // Spiller lyden første gang
+        spillInstrument();
+
+    }
+
+    // Spiller av lyden på instrument
+    function spillInstrument(){
+        // Setter altid lyden til valgt instrumment
+        audio.src = `lyder/${instrument[valgtInstrument]}.mp3`;
+        audio.play();
+    }
+
+    // Sjekker gjetting
+    function gjett(indeks){
+        antallGjetninger++;
+        if(indeks === valgtInstrument){
+            audio.src = "lyder/riktig.mp3";
+            audio.play();
+            bildeDiver[valgtInstrument].style.display = "none";
+            setTimeout(finnNyttInstrument, 1500);
+
+        }else{
+            audio.src = "lyder/feil.mp3";
+            audio.play();
+        }
+    }
+
+    // Avslutter quizen
+    function avslutt(){
+
+        // Sjekker highscore
+        if (antallGjetninger<highScore){
+            highScore = antallGjetninger;
+            highScoreTekst.innerHTML = highScore;
+        }else{
+            beskjed.innerHTML = `Du brukte ${antallGjetninger} til å gjette alle instrumentene!`
+        }
+
+        if (antallGjetninger===instrument.length){
+            beskjed.innerHTML = "WOW dette kan du! Ikke noen feil :D";
+        }
+
+        // Bytter knappen til en start quiz knapp
+        knapp.innerHTML = "Start quiz på nytt"
+        knapp.onclick = startQuiz;
+    }
+
+    window.onload = setup;
+</script>
 </body>
 </html>
