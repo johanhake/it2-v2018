@@ -3,8 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Program</title>
+    <link rel="stylesheet" href="css/brukerinput.css">
+    <style>
+        body{
+            font-family: Verdana, sans-serif;
+        }
+
+        img{
+            width: 85%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        h1{
+            margin: 0 auto
+            width: 85%;
+            text-align: center;
+        }
+
+        form{
+            display: grid;
+            grid-gap: 5px;
+            width: 85%;
+            margin: 0 auto;
+            grid-template-columns: 1fr 1fr;
+        }
+
+    </style>
 </head>
 <body>
+<h1>Program</h1>
+<img src="bilder/program.PNG" alt="">
+<form onsubmit="sendInnBestilling(event)">
+    <div>
+        <select required>
+            <option value="">Velg arrangemang</option>
+            <option value="Trondheim kammermusikkfestival: Fabelaktig formiddag">Trondheim kammermusikkfestival: Fabelaktig formiddag</option>
+            <option value="Spill opp!">Spill opp!</option>
+            <option value="Onsdagskonsert">Onsdagskonsert</option>
+            <option value="Juiogat: Joik for folk">Juiogat: Joik for folk</option>
+        </select>
+        <label for="inpAntallVoksne">Antall barn (100kr)</label>
+        <input required id="inpAntallVoksne" value="0" type="number" min="0">
+        <label for="inpAntallBarn">Antall barn (50kr)</label>
+        <input required id="inpAntallBarn" value="0" type="number" min="0">
+        <button>Bestill</button>
+    </div>
+    <div id="info"></div>
+</form>
+<script>
+    // Sender inn bestillingsskjemaet
+    function sendInnBestilling(event){
+        event.preventDefault();
+        let infoDiv = document.querySelector("#info");
+        let arrangemang = document.querySelector("select").value;
+        let antallVoksne = Number(document.querySelector("#inpAntallVoksne").value);
+        let antallBarn = Number(document.querySelector("#inpAntallBarn").value);
+        let totalBiletter =antallVoksne+antallBarn;
+        let rabatt = totalBiletter>=5;
+        let rabattMelding = "";
 
+        let melding = `Du har bestilt ${totalBiletter} biletter til ${arrangemang}, `;
+        if (antallVoksne > 0 && antallBarn > 0){
+             melding += `${antallVoksne} voksne og ${antallBarn} barn.`;
+        }else if (antallBarn > 0){
+            melding += `${antallBarn} barn.`;
+        } else if (antallVoksne>0){
+            melding += `${antallVoksne} voksne.`;
+        } else {
+            infoDiv.innerHTML = "Du må bestille minst en bilett!";
+            return;
+        }
+
+        // Beregner prisen
+        let pris = (antallBarn*50 + antallVoksne*100);
+
+        // Sjekker rabatt
+        if (rabatt) {
+            pris *= 0.8;
+            rabattMelding = ", inklusive grupperabatt på 20%";
+        }
+
+        infoDiv.innerHTML = `${melding} Totalprisen er ${pris} kr${rabattMelding}.`;
+        document.querySelector("form").reset();
+    }
+</script>
 </body>
 </html>
