@@ -48,6 +48,7 @@
     let valgtInstrument;
     let antallGjetninger = 0;
     let highScore = 100;
+    let klikkbar = false;
 
     // Lager bilder og tekster
     function setup(){
@@ -69,6 +70,7 @@
 
     // Starter quizen
     function startQuiz(event){
+        klikkbar = true;
         beskjed.innerHTML = "";
         knapp.innerHTML = "Spill instrument på nytt"
         knapp.onclick = spillInstrument;
@@ -87,10 +89,8 @@
     // Finner nytt instrument
     function finnNyttInstrument(){
 
-        if (skalSpilles.length===0){
-            avslutt();
-            return;
-        }
+        // switcher klikkbar
+        klikkbar = true;
 
         // Finner en tilfeldig indeks
         let indeks = Math.floor(Math.random()*skalSpilles.length);
@@ -115,11 +115,21 @@
 
     // Sjekker gjetting
     function gjett(indeks){
+        // Sjekker om bildet skal være klikkbar
+        if (!klikkbar){
+            return;
+        }
         antallGjetninger++;
         if(indeks === valgtInstrument){
             audio.src = "lyder/riktig.mp3";
             audio.play();
             bildeDiver[valgtInstrument].style.display = "none";
+            klikkbar = false;
+            if (skalSpilles.length===0){
+                avslutt();
+                return;
+            }
+
             setTimeout(finnNyttInstrument, 1500);
 
         }else{
