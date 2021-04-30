@@ -16,7 +16,7 @@
         }
 
         h1{
-            margin: 0 auto
+            margin: 0 auto;
             width: 85%;
             text-align: center;
         }
@@ -59,8 +59,9 @@
         let arrangemang = document.querySelector("select").value;
         let antallVoksne = Number(document.querySelector("#inpAntallVoksne").value);
         let antallBarn = Number(document.querySelector("#inpAntallBarn").value);
+
+        // Variabler
         let totalBiletter =antallVoksne+antallBarn;
-        let rabatt = totalBiletter>=5;
         let rabattMelding = "";
 
         let melding = `Du har bestilt ${totalBiletter} biletter til ${arrangemang}, `;
@@ -79,7 +80,7 @@
         let pris = (antallBarn*50 + antallVoksne*100);
 
         // Sjekker rabatt
-        if (rabatt) {
+        if (totalBiletter>=5) {
             pris *= 0.8;
             rabattMelding = ", inklusive grupperabatt på 20%";
         }
